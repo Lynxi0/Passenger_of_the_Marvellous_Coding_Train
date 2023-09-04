@@ -1,0 +1,49 @@
+
+String density;
+int taille_density;
+int choix;
+PImage img;
+String url;
+int x;
+int y;
+int loc;
+float r;
+float g;
+float b;
+float result;
+float ratio_x;
+float ratio_y;
+String resultat = "";
+
+void setup(){
+  density = "@#W$9876543210?!abc;:+=-    ";
+  taille_density = density.length();
+  url = "C:/Users/youri/Desktop/generative art/sketch_2/antho_full_100.png";
+  img = loadImage(url);
+
+  ratio_x = width / img.width;
+  ratio_y = height / img.height;
+  //filter(GRAY);
+  //loadPixels();
+  //img.loadPixels();
+  for (y=0; y<img.height; y++){
+    for (x=0; x<img.width; x++){
+      loc = x + y * img.width;
+      r = red(img.pixels[loc]);
+      g = green(img.pixels[loc]);
+      b = blue(img.pixels[loc]);
+      
+      result = (r+g+b)/3;
+      //choix = floor(map(result, 0, 255, 0, taille_density));
+      choix = taille_density - floor(map(result, 0, 255, 0, taille_density)) -1;
+      if (density.charAt(choix) == ' '){
+        resultat += ' ';
+      }
+      else resultat += density.charAt(choix);
+
+ 
+    }
+    resultat = resultat + '\n';
+  }
+  println(resultat);
+}
