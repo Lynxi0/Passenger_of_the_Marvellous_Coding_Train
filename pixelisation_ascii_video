@@ -1,0 +1,66 @@
+import processing.video.*;
+
+String density;
+int taille_density;
+int choix;
+String url;
+int x;
+int y;
+int loc;
+float r;
+float g;
+float b;
+float result;
+float ratio_x;
+float ratio_y;
+
+int cellSize = 20;
+// Number of columns and rows in our system
+int cols, rows;
+// Variable for capture device
+Capture video;
+
+void setup(){
+  density = "Ñ@#W$9876543210?!abc;:+=-,._ ";
+  taille_density = density.length();
+  
+  size(800,800);
+  frameRate(30);
+  video = new Capture(this, 110, 110);
+  video.start();
+  
+}
+
+
+
+void draw() {
+  background(0);
+  //loadPixels();
+  ratio_x = width / video.width;
+  ratio_y = height / video.height;
+  
+  
+  video.read();
+  video.loadPixels();
+  for (x=0; x<video.width; x++){
+    for (y=0; y<video.height; y++){
+      loc = x + y * video.width;
+      r = red(video.pixels[loc]);
+      g = green(video.pixels[loc]);
+      b = blue(video.pixels[loc]);
+      
+      result = (r+g+b)/3;
+      noStroke();
+      fill(255);
+      choix = taille_density-1 - floor(map(result, 0, 255, 0, taille_density-1)) ;
+      //choix = floor(map(result, 0, 255, 0, taille_density-1)) ;
+      //square(x * ratio_x,y * ratio_y, ratio_x);
+      textSize(ratio_x);
+      textAlign(CENTER,CENTER);
+      text(density.charAt(choix),(x+0.5) * ratio_x,(y+0.5) * ratio_y);
+      //text(density.charAt(choix),(x+0.5) * 4,(y+0.5) * 4);
+      //pixels[loc] = color(result,result,result);
+    }
+  }
+  updatePixels();
+}
